@@ -15,6 +15,11 @@ public class Task {
         this.completed = true;
     }
 
+    public void unmarkCompleted() {
+        this.completed = false;
+    }
+
+
     public boolean isCompleted() {
         return completed;
     }

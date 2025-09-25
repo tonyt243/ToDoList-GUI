@@ -60,7 +60,7 @@ public class ToDoListApp {
         }
 
         if (!InputValidator.isValidDate(date)) {
-            JOptionPane.showMessageDialog(frame, "Invalid date! Use MM/dd/yyyy format.");
+            JOptionPane.showMessageDialog(frame, "Invalid date! Use mm/dd/yyyy format.");
         return;
         }
 
@@ -86,8 +86,12 @@ public class ToDoListApp {
             int selected = taskList.getSelectedIndex();
             if (selected != -1) {
                 Task task = tasks.get(selected);
-                task.markCompleted();
-                taskModel.set(selected, task); // refresh display
+                if (task.isCompleted()){
+                    task.unmarkCompleted();
+                }else{
+                    task.markCompleted();
+                }
+                taskModel.set(selected, task);
             }
         });
 
