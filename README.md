@@ -1,6 +1,7 @@
-## Getting Started
+## Java To Do List GUI
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A simple Java Swing application for managing daily tasks with a graphical user interface.  
+Users can add, delete, and mark tasks as completed/uncompleted through an intuitive list view.
 
 ## Folder Structure
 
@@ -9,10 +10,9 @@ The workspace contains two folders by default, where:
 - `src`: the folder to maintain sources
 - `lib`: the folder to maintain dependencies
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## How To Run
+- Clone the repository `git clone https://github.com/tonyt243/ToDoList-GUI`
+- Compile `javac src/*.java`
+- Run `java -cp src ToDoListApp`
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
