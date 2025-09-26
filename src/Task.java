@@ -35,7 +35,8 @@ public class Task {
 
     //Convert task to text line for saving
     public String toFileString() {
-        return "Task list\n" + description + " ; " + priority + " ; " + date + " ; " + completed;
+        String status = completed ? "Completed" : "Incomplete";
+        return "TASK LIST:\n\n" + description + " ; " + priority + " ; " + date + " ; " + status;
     }
 
     //Rebuild a task from text line
