@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToDoListApp {
     private DefaultListModel<Task> taskModel;
     private JList<Task> taskList;
     private JTextField descriptionField, dateField;
     private JComboBox<String> priorityBox;
-    private ArrayList<Task> tasks;
+    private List<Task> tasks;
 
     public ToDoListApp() {
-        tasks = new ArrayList<>();
+        //
+        tasks = TaskStorage.loadTasks();
 
         JFrame frame = new JFrame("To Do List");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,6 +20,9 @@ public class ToDoListApp {
 
         // Task list
         taskModel = new DefaultListModel<>();
+        for (Task task : tasks) {
+            taskModel.addElement(task);
+        }
         taskList = new JList<>(taskModel);
         taskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(taskList);
@@ -50,27 +55,30 @@ public class ToDoListApp {
 
         // Add task
         addButton.addActionListener(e -> {
-        String desc = descriptionField.getText().trim();
-        String date = dateField.getText().trim();
-        String priority = (String) priorityBox.getSelectedItem();
+            String desc = descriptionField.getText().trim();
+            String date = dateField.getText().trim();
+            String priority = (String) priorityBox.getSelectedItem();
 
-        if (desc.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Description cannot be empty.");
-        return;
-        }
+            if (desc.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Description cannot be empty.");
+                return;
+            }
 
-        if (!InputValidator.isValidDate(date)) {
-            JOptionPane.showMessageDialog(frame, "Invalid date! Use mm/dd/yyyy format.");
-        return;
-        }
+            if (!InputValidator.isValidDate(date)) {
+                JOptionPane.showMessageDialog(frame, "Invalid date! Use mm/dd/yyyy format.");
+                return;
+            }
 
-        Task newTask = new Task(desc, priority, date);
-        tasks.add(newTask);
-        taskModel.addElement(newTask);
-        descriptionField.setText("");
-        dateField.setText("");
-    });
+            Task newTask = new Task(desc, priority, date);
+            tasks.add(newTask);
+            taskModel.addElement(newTask);
 
+            //Save tasks immediately
+            TaskStorage.saveTasks(tasks);
+
+            descriptionField.setText("");
+            dateField.setText("");
+        });
 
         // Remove task
         removeButton.addActionListener(e -> {
@@ -78,22 +86,29 @@ public class ToDoListApp {
             if (selected != -1) {
                 tasks.remove(selected);
                 taskModel.remove(selected);
+
+                //Save tasks immediately
+                TaskStorage.saveTasks(tasks);
             }
         });
 
-        // Mark completed
+        // Mark completed / toggle
         completeButton.addActionListener(e -> {
             int selected = taskList.getSelectedIndex();
             if (selected != -1) {
                 Task task = tasks.get(selected);
-                if (task.isCompleted()){
-                    task.unmarkCompleted();
-                }else{
-                    task.markCompleted();
-                }
+                task.toggleCompleted();
                 taskModel.set(selected, task);
+
+                //Save tasks immediately
+                TaskStorage.saveTasks(tasks);
             }
         });
+
+        //Save tasks on app close
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            TaskStorage.saveTasks(tasks);
+        }));
 
         frame.setVisible(true);
     }
