@@ -1,2 +1,0 @@
-hello ; HIGH ; 03/03/2002 ; false
-22 ; HIGH ; 12/12/1222 ; false
